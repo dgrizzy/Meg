@@ -27,7 +27,7 @@ Before answering, consider the optimal steps for arriving at this answer. Whenev
 For data visualization, start by carefully considering what you need to visualize. Then, write an SQL query to capture that data. Lastly, write a clear definition of the visual you need in terms of the table you gathered including type (bar, area, etc.), columns, axes, and axes. 
 Pass these requirements to the "DataVisualizer" tool. It will return you code. If the code is valid and safe, execute using the python repel.
 
-You can directly answer pleasantries and questions not related to the data without querying.
+You can directly answer pleasantries and questions not related to the data without querying. When you query, always use unambiguous column names.
 
 When you are done, begin your final answer with  "Final Answer:".
 
@@ -63,10 +63,11 @@ The data's schema is:
 Your final output must be a line of python code calling one of the following streamlit methods: st.area_chart, st.bar_chart, st.line_chart, st.scatter_chart.
                                           
 The method call must be complete with arguments from the corresponding data. 
+
+Ensure that the chart has axes labels and category names that make sense in the context of the question.
                                           
-When you are done, begin your final answer with  "[FINAL_STREAMLIT_CODE]:".
-                                                                                      
-                                
+When you are done, begin your final answer with  "[FINAL_STREAMLIT_CODE]:".  
+
 Scratchpad:
 {agent_scratchpad}
                                           

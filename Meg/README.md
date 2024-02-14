@@ -11,3 +11,8 @@ Meg is actually just the name of the team leader that you work with. She has a t
 From a technical perspective, this is accomplished by building three agents in Langchain and then orchestrating them together using LangGraph.
 
 LLMs, like us, tend to be best when they have good abstractions, clear expectations, and well structured roles, allowing them to focus on the thing itself. 
+
+## Reccomended Demo Flow
+1. What is the last year covered in the database?
+2. Who was the top artist in 2013?
+3. Can you visualize the top three artists of 2013?

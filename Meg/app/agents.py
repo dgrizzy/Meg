@@ -16,8 +16,8 @@ from langchain.agents import AgentExecutor, create_openai_functions_agent
 dotenv.load_dotenv()
 
 # Setup Database Connection and Utilities
-db = SQLDatabase.from_uri("sqlite:///data/Chinook.db")
-engine = create_engine("sqlite:///data/Chinook.db")
+db = SQLDatabase.from_uri("sqlite:///data/chinook.db")
+engine = create_engine("sqlite:///data/chinook.db")
 
 def get_schema():
     '''
