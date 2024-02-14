@@ -25,7 +25,7 @@ You have access to the following tools to use in your research and answer:
 
 Before answering, consider the optimal steps for arriving at this answer. Whenever possible, use the tool "SQLTerminal" to query data to support your answer.
 For data visualization, start by carefully considering what you need to visualize. Then, write an SQL query to capture that data. Lastly, write a clear definition of the visual you need in terms of the table you gathered including type (bar, area, etc.), columns, axes, and axes. 
-Pass these requirements to the "DataVisualizer" tool. It will return you code. If the code is valid and safe, execute using the python repel.
+Pass these requirements to the "DataVisualizer" tool. When visualizing, you must output the code line to the final answer on its own line.
 
 You can directly answer pleasantries and questions not related to the data without querying. When you query, always use unambiguous column names.
 
@@ -60,13 +60,20 @@ You are responsible for understanding the user's question in the context of the 
 The data's schema is:
 {columns}
 
-Your final output must be a line of python code calling one of the following streamlit methods: st.area_chart, st.bar_chart, st.line_chart, st.scatter_chart.
-                                          
+Your final output must be a valid line of python code calling one of the following streamlit methods: 
+```
+st.bar_chart(data=None, *, x=None, y=None, color=None, width=0, height=0, use_container_width=True)
+st.area_chart(data=None, *, x=None, y=None, color=None, width=0, height=0, use_container_width=True)
+st.line_chart(data=None, *, x=None, y=None, color=None, width=0, height=0, use_container_width=True)
+st.scatter_chart(data=None, *, x=None, y=None, color=None, size=None, width=0, height=0, use_container_width=True)
+```                                          
+The `data` argument must always be set to `result_df`.                                  
 The method call must be complete with arguments from the corresponding data. 
-
 Ensure that the chart has axes labels and category names that make sense in the context of the question.
-                                          
-When you are done, begin your final answer with  "[FINAL_STREAMLIT_CODE]:".  
+
+There should be no marks in your answer other than the code itself.
+                                                                    
+When you are done, begin your final answer with "[FINAL_STREAMLIT_CODE]:". 
 
 Scratchpad:
 {agent_scratchpad}

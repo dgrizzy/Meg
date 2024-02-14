@@ -1,24 +1,35 @@
 # Use an official Python runtime as a parent image
-FROM python:3.12-slim
+FROM docker.io/python:3.12 AS builder
 
 # Set the working directory in the container
-WORKDIR /container_files
+RUN mkdir usr/src/meg
+WORKDIR /usr/src/meg
 
-# Copy the current directory contents into the container at /app
-COPY app ./app
-COPY data /data 
-COPY main.sh .
+COPY Pipfile .
+COPY Pipfile.lock .
 
-# Install Pipenv
-RUN pip install --upgrade pip && \
-    pip install pipenv
+ENV PIPENV_VENV_IN_PROJECT=1
 
-# Install project dependencies
-COPY Pipfile Pipfile.lock /container_files/
-RUN pipenv install --deploy --ignore-pipfile
+RUN pip install --upgrade pip
+RUN pip install pipenv
+
+RUN pipenv install 
+
+# Create Runtime
+FROM docker.io/python:3.12 AS runtime
+
+RUN mkdir usr/src/meg
+
+RUN mkdir /usr/src/meg/.venv
+COPY /app /usr/src/meg/app/
+COPY /data /usr/src/meg/data/
+
+COPY --from=builder /usr/src/meg/.venv/ /usr/src/meg/.venv/
 
 # Make port 8501 available to the world outside this container
 EXPOSE 8501
 
+WORKDIR /usr/src/meg
+
 # Run Streamlit
-CMD ["pipenv", "run", "main.sh"]
+CMD ["/usr/src/meg/.venv/bin/python", "-m", "streamlit", "run", "/usr/src/meg/app/interface.py", "--server.port=8501", "--server.address=0.0.0.0"]

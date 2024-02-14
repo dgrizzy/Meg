@@ -12,12 +12,12 @@ from langchain.tools import BaseTool, StructuredTool, tool
 from langchain.agents import AgentExecutor, create_openai_functions_agent
 
 
-
 dotenv.load_dotenv()
 
 # Setup Database Connection and Utilities
-db = SQLDatabase.from_uri("sqlite:///data/chinook.db")
-engine = create_engine("sqlite:///data/chinook.db")
+db_file = "sqlite:///data/chinook.db"
+db = SQLDatabase.from_uri(db_file)
+engine = create_engine(db_file)
 
 def get_schema():
     '''
@@ -75,10 +75,24 @@ def DataVisualizer(prompt, query):
     result_df =  run_query_df(query)
 
     result_text = vis_executor.invoke({"input": prompt,
-                                       "columns": result_df.columns})['output' ]
+                                       "columns": result_df.columns})['output']
 
-    final_code = result_text.split('[FINAL_STREAMLIT_CODE]:')[-1].strip()
-    print(final_code)                   
+    final_code = result_text.split('[FINAL_STREAMLIT_CODE]:')[-1].strip().strip('`').strip().strip('python')
+    query_concat = ' '.join(query.split("\n"))
+
+    with open('temp_vis_script.py', 'w') as outfile:
+        python_lines = ['import pandas as pd',
+                        'from sqlalchemy import create_engine',
+                        f'engine = create_engine("{db_file}")',
+                        'connection = engine.connect()',
+                        f'result_df = pd.read_sql("{query_concat}", connection)',
+                        'connection.close()',
+                        final_code
+                        ]
+        
+        for line in python_lines:
+            outfile.write(line)
+            outfile.write('\n\n')
 
     return final_code
 
@@ -91,5 +105,5 @@ agent = create_openai_functions_agent(llm,
                                       prompt = prompts.meg_chat_plot_template.partial(tools = tool_list),
                                       )
 
-agent_executor = AgentExecutor(agent = agent, 
-                               tools = agent_tools)        
+main_agent_executor = AgentExecutor(agent = agent, 
+                                    tools = agent_tools)        

@@ -1,0 +1,1 @@
+docker run -it -p 8501:8501 us-central1-docker.pkg.dev/appgarden/meg/megchatbot:20240214094511

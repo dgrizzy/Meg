@@ -4,7 +4,7 @@ IMAGE_NAME="meg"
 TIMESTAMP=$(date +"%Y%m%d%H%M%S")
 
 # Create the Docker tag with the image name and timestamp
-TAG="${IMAGE_NAME}:${TIMESTAMP}"
+TAG="us-central1-docker.pkg.dev/appgarden/meg/megchatbot:${TIMESTAMP}"
 
 # Directory containing the Dockerfile
 DOCKERFILE_DIRECTORY="."
@@ -18,3 +18,5 @@ if [ $? -eq 0 ]; then
 else
     echo "Failed to build Docker image."
 fi
+
+docker push $TAG
